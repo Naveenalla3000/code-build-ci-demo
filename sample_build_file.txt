@@ -1,0 +1,28 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_REGISTRY_USERNAME: /myapp/docker-cred/username
+    DOCKER_REGISTRY_PASSWORD: /myapp/docker-cred/password
+    DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo "building docker image..."
+      - docker login -u "$DOCKER_REGISTRY_USERNAME" -p "$DOCKER_REGISTRY_PASSWORD"
+      - docker build -t "$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_URL:latest" .
+      - docker push "$DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_URL:latest"
+  post_build:
+    commands:
+      - echo "build is successfull"
+
+
+# https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html
