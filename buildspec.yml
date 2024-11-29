@@ -23,6 +23,3 @@ phases:
   post_build:
     commands:
       - echo "build is successfull"
-
-
-# https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html
